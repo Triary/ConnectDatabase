@@ -1,0 +1,47 @@
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Workers;
+DROP TABLE IF EXISTS Cars;
+
+CREATE TABLE Workers (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Name VarChar(50)
+    );
+  
+
+CREATE TABLE Cars (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Manufactorer VarChar(50),
+    Model VarChar(50)
+    );
+
+
+CREATE TABLE Orders (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+    AcceptorId INT UNIQUE,
+    RepairerId INT UNIQUE,
+    CarId INT,
+    Defect VarChar(1000),
+    Fixed VarChar(1000),
+    
+    FOREIGN KEY (AcceptorId) REFERENCES Workers(Id),
+    FOREIGN KEY (RepairerId) REFERENCES Workers(Id),
+    FOREIGN KEY (CarId) REFERENCES Cars(Id)
+    
+    );
+    
+    
+INSERT INTO Workers (Name) VALUES ("Петр"), ("Ханчсан"), ("Йохансон"), ("Убивец"), ("Камикадзе"), ("СэрНиколос"), ("Русалочка"), ("Снуп Дог"), ("Чужой");
+
+INSERT INTO Cars (Manufactorer, Model) VALUES ("BMW", "M5"), ("Lada", "Седан"), ("УАЗ", "Буханка"), ("Lada", "Нива");
+
+INSERT INTO Orders (AcceptorId, RepairerId, CarId, Defect, Fixed)
+SELECT wa.Id, wr.Id, c.Id, "90 в душе", "Сделать буханкой" 
+FROM  Workers as wa, Cars as c, Workers as wr
+WHERE wa.Name = "Убивец" AND wr.Name = "Чужой" AND c.Model = "M5";
+
+INSERT INTO Orders (AcceptorId, RepairerId, CarId, Defect, Fixed)
+SELECT wa.Id, wr.Id, c.Id, "Сделать из неё BMW", "Купить запчасти на алике" 
+FROM  Workers as wa, Cars as c, Workers as wr
+WHERE wa.Name = "Петр" AND wr.Name = "Русалочка" AND c.Model = "Буханка";
+
+SELECT * FROM Orders
